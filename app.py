@@ -39,15 +39,17 @@ if st.button("Predict"):
             for article in articles[:2]:
                 st.write(f"- [{article['title']}]({article['url']})")
         else:
-            st.warning("⚠️ No exact match found. Checking with AI model...")
+            st.warning("⚠️ No exact match found. Checking with AI model...")vec_input = vectorizer.transform([user_input])
+prediction = model.predict(vec_input)[0]
 
-            vec_input = vectorizer.transform([user_input])
-            prediction = model.predict(vec_input)[0]
+st.write("⚙️ Debug — Model Prediction:", prediction)
 
-            if prediction == 1:
-               st.error("🚫 This news is FAKE.")
-            else:
-               st.success("✅ This news is REAL.")
+if prediction == 1:
+    st.error("🚫 This news is FAKE.")
+else:
+    st.success("✅ This news is REAL.")
+
+
 
 st.caption("⚠️ This result is based on text patterns only, not real-time fact-checking.")
 
