@@ -1,5 +1,14 @@
 import streamlit as st
 import pickle
+import requests
+
+# Function to check NewsAPI
+def check_with_newsapi(query):
+    api_key = "21c259a09cca476894f5dba48115a09f"  # 🔁 Replace with your real API key
+    url = f"https://newsapi.org/v2/everything?q={query}&language=en&pageSize=5&apiKey={api_key}"
+    response = requests.get(url)
+    articles = response.json().get("articles", [])
+    return articles
 
 # Load model and vectorizer
 model = pickle.load(open('model.pkl', 'rb'))
@@ -16,10 +25,22 @@ if st.button("Predict"):
     if user_input.strip() == "":
         st.warning("Please enter some text.")
     else:
-        vec_input = vectorizer.transform([user_input])
-        prediction = model.predict(vec_input)[0]
+        st.info("🔎 Checking real news sources...")
+        articles = check_with_newsapi(user_input)
 
-        if prediction == "FAKE":
-            st.error("🚫 This news is FAKE.")
+        if len(articles) > 0:
+            st.success("✅ This news appears in real sources.")
+            for article in articles[:2]:
+                st.write(f"- [{article['title']}]({article['url']})")
         else:
-            st.success("✅ This news is REAL.")
+            st.warning("⚠️ No matching news found in real sources. Using ML model...")
+            vec_input = vectorizer.transform([user_input])
+            prediction = model.predict(vec_input)[0]
+
+            if prediction == "FAKE":
+                st.error("🚫 This news is FAKE.")
+            else:
+                st.success("✅ This news is REAL.")
+
+st.caption("⚠️ This result is based on text patterns only, not real-time fact-checking.")
+
