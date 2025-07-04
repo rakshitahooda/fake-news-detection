@@ -44,11 +44,10 @@ if st.button("Predict"):
             vec_input = vectorizer.transform([user_input])
             prediction = model.predict(vec_input)[0]
 
-            if prediction == "FAKE":
-                st.error("🚫 This news is FAKE.")
+            if prediction == 1:
+               st.error("🚫 This news is FAKE.")
             else:
-                st.success("✅ This news is REAL.")
-
+               st.success("✅ This news is REAL.")
 
 st.caption("⚠️ This result is based on text patterns only, not real-time fact-checking.")
 
