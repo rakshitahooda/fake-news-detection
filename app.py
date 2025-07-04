@@ -28,19 +28,26 @@ if st.button("Predict"):
         st.info("🔎 Checking real news sources...")
         articles = check_with_newsapi(user_input)
 
-        if len(articles) > 0:
-            st.success("✅ This news appears in real sources.")
+        found_match = False
+        for article in articles:
+            if user_input.lower() in article['title'].lower():
+                found_match = True
+                break
+
+        if found_match:
+            st.success("✅ This exact news appears in real sources.")
             for article in articles[:2]:
                 st.write(f"- [{article['title']}]({article['url']})")
         else:
-            st.warning("⚠️ No matching news found in real sources. Using ML model...")
+            st.warning("⚠️ No exact match found. Using ML model...")
             vec_input = vectorizer.transform([user_input])
             prediction = model.predict(vec_input)[0]
 
             if prediction == "FAKE":
                 st.error("🚫 This news is FAKE.")
             else:
-                st.success("✅ This news is REAL.")
+                st.success("✅ This news is REAL (based on model prediction).")
+
 
 st.caption("⚠️ This result is based on text patterns only, not real-time fact-checking.")
 
