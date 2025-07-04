@@ -2,9 +2,10 @@
 # Detecting fake news using Logistic Regression and TF-IDF
 # 📰 Fake News Detection using Machine Learning
 
+[![Open in Colab] https://colab.research.google.com/drive/1wocX-N8nXPuMW_Cwa-F0ITQF4rEoP1Gl?usp=sharing
 This project uses a Logistic Regression model combined with TF-IDF vectorization to detect whether a news article is fake or real based on its title and text.
 
----
+
 
 ## 📌 Dataset
 - Used: [Kaggle Fake & Real News Dataset](https://www.kaggle.com/datasets/clmentbisaillon/fake-and-real-news-dataset)
@@ -41,3 +42,6 @@ Classification Report:
                precision    recall  f1-score   support
         FAKE       0.94      0.95      0.94       590
         REAL       0.95      0.93      0.94       585
+Name: Rakshita Hooda
+
+GitHub: @rakshitahooda
