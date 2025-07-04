@@ -25,28 +25,29 @@ if st.button("Predict"):
     if user_input.strip() == "":
         st.warning("Please enter some text.")
     else:
-        st.info("🔎 Checking real news sources...")
+        st.info("🔎 Searching in real news sources...")
         articles = check_with_newsapi(user_input)
 
-        found_match = False
+        found_exact = False
         for article in articles:
-            if user_input.lower() in article['title'].lower():
-                found_match = True
+            if user_input.lower() == article['title'].strip().lower():
+                found_exact = True
                 break
 
-        if found_match:
-            st.success("✅ This exact news appears in real sources.")
+        if found_exact:
+            st.success("✅ This exact news is found in real articles.")
             for article in articles[:2]:
                 st.write(f"- [{article['title']}]({article['url']})")
         else:
-            st.warning("⚠️ No exact match found. Using ML model...")
+            st.warning("⚠️ No exact match found. Checking with AI model...")
+
             vec_input = vectorizer.transform([user_input])
             prediction = model.predict(vec_input)[0]
 
             if prediction == "FAKE":
                 st.error("🚫 This news is FAKE.")
             else:
-                st.success("✅ This news is REAL (based on model prediction).")
+                st.success("✅ This news is REAL.")
 
 
 st.caption("⚠️ This result is based on text patterns only, not real-time fact-checking.")
